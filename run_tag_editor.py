@@ -4,9 +4,17 @@ from mp3_tagger import MP3File
 
 # array containing keywords to be removed from the filename
 keywords_to_remove = [' myfreemp3.vip', 'X2Download.app - ', 'X2Download.app ', ' (320 kbps)']
+words_removal_arr = []
 
 # path to the folder containing the music files
-path_to_music = r'D:\Music\test_folder'
+path_to_music = r'D:\Music\2023\03_March\2'
+
+
+def read_keyboard_input():
+    keywords_nr = int(input('How many keywords do you want to remove?: '))
+    for i in range(keywords_nr):
+        words_removal_arr.append(str(input('Keyword ' + str(i+1) + ':')))
+    print(words_removal_arr)
 
 
 def remove_duplicates():
@@ -94,11 +102,12 @@ def edit_ID3_tag():
 
 
 def __main__():
+    read_keyboard_input()
     start = time.time()
-    remove_duplicates()
-    process_files()
+    # remove_duplicates()
+    # process_files()
     # show_all_files()
-    edit_ID3_tag()
+    # edit_ID3_tag()
     end = time.time()
     print('Completed successfully in: ' + "{:.2f}".format(end - start) + ' s')
 
