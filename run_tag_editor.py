@@ -3,17 +3,17 @@ import time
 from mp3_tagger import MP3File
 
 # array containing keywords to be removed from the filename
-keywords_to_remove = [' myfreemp3.vip', 'X2Download.app - ', 'X2Download.app ', ' (320 kbps)']
+keywords_to_remove = [' myfreemp3.vip', 'X2Download.app - ', 'X2Download.app ', ' (320 kbps)', 'SaveTube.io -']
 words_removal_arr = []
 
 # path to the folder containing the music files
-path_to_music = r'D:\Music\2023\03_March\2'
+path_to_music = r'D:\Music\2023\06_June\de_pe_vinil_1'
 
 
 def read_keyboard_input():
     keywords_nr = int(input('How many keywords do you want to remove?: '))
     for i in range(keywords_nr):
-        words_removal_arr.append(str(input('Keyword ' + str(i+1) + ':')))
+        words_removal_arr.append(str(input('Keyword ' + str(i + 1) + ':')))
     print(words_removal_arr)
 
 
@@ -74,13 +74,15 @@ def clear_fields(mp3_file):
     mp3_file.composer = emtpy_field
     mp3_file.publisher = emtpy_field
     mp3_file.url = emtpy_field
+    #mp3_file.genre = emtpy_field
     mp3_file.year = emtpy_field
     mp3_file.save()
 
 
 def edit_ID3_tag():
     print('running tag edit...')
-    parser_delimiter = ' - '
+    parser_delimiter_1 = ' - '  # delimiters seen: ' - ' ' – '
+    parser_delimiter_2 = ' – '
     for file in os.listdir(path_to_music):
         path_to_file = os.path.join(path_to_music, file)
         if os.path.isfile(path_to_file) and '.mp3' in file:
@@ -91,8 +93,13 @@ def edit_ID3_tag():
             # Clear all id3 tag fields
             clear_fields(mp3)
 
-            if parser_delimiter in file:
-                split_song_arr = file.split(parser_delimiter)
+            # under work
+            if parser_delimiter_1 in file:
+                split_song_arr = file.split(parser_delimiter_1)
+                mp3.artist = split_song_arr[0]
+                mp3.song = split_song_arr[1][:-4]
+            elif parser_delimiter_2 in file:
+                split_song_arr = file.split(parser_delimiter_2)
                 mp3.artist = split_song_arr[0]
                 mp3.song = split_song_arr[1][:-4]
             else:
@@ -102,12 +109,12 @@ def edit_ID3_tag():
 
 
 def __main__():
-    read_keyboard_input()
+    # read_keyboard_input()
     start = time.time()
-    # remove_duplicates()
-    # process_files()
+    remove_duplicates()
+    process_files()
     # show_all_files()
-    # edit_ID3_tag()
+    edit_ID3_tag()
     end = time.time()
     print('Completed successfully in: ' + "{:.2f}".format(end - start) + ' s')
 
