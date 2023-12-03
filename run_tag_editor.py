@@ -52,7 +52,8 @@ class MusicProcessor:
             if os.path.isfile(path_to_file):
                 print(file)
 
-    def clear_fields(self, mp3_file):
+    @staticmethod
+    def clear_fields(mp3_file):
         empty_field = ''
         mp3_file.album = empty_field
         mp3_file.band = empty_field
@@ -87,7 +88,8 @@ class MusicProcessor:
                     mp3.song = file[:-4]
                 mp3.save()
 
-    def _print_summary(self, count_duplicates, total_nr_files):
+    @staticmethod
+    def _print_summary(count_duplicates, total_nr_files):
         print('--------------------------------------------')
         print(f'Duplicates removed: {count_duplicates}')
         print(f'Total number of songs: {total_nr_files}')
