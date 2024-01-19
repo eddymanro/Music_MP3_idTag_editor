@@ -1,5 +1,6 @@
 import os
 import time
+import shutil
 from mp3_tagger import MP3File
 
 
@@ -7,7 +8,7 @@ class MusicProcessor:
     def __init__(self, music_folder):
         self.music_folder = music_folder
         self.keywords_to_remove = [
-            ' myfreemp3.vip', 'X2Download.app - ', 'X2Download.app ', ' (320 kbps)', 'SaveTube.io -'
+            ' myfreemp3.vip', 'X2Download.app - ', 'X2Download.app ', ' (320 kbps)', 'SaveTube.io -', ' (320kbps)'
         ]
         self.check_arr = ['(1)', '(2)', '(3)']
         self.parser_delimiters = [' - ', ' – ']
@@ -16,6 +17,26 @@ class MusicProcessor:
         keywords_nr = int(input('How many keywords do you want to remove?: '))
         self.keywords_to_remove = [input(f'Keyword {i + 1}:') for i in range(keywords_nr)]
         print(self.keywords_to_remove)
+
+    def move_files_to_root(self):
+        # Ensure the root folder exists
+        if not os.path.exists(self.music_folder):
+            print(f"The specified root folder '{self.music_folder}' does not exist.")
+            return
+
+        # Iterate through all subfolders
+        for foldername, subfolders, filenames in os.walk(self.music_folder):
+            for filename in filenames:
+                # Construct the source and destination paths
+                source_path = os.path.join(foldername, filename)
+                destination_path = os.path.join(self.music_folder, filename)
+
+                # Move the file to the root folder
+                try:
+                    shutil.move(source_path, destination_path)
+                    print(f"Moved '{filename}' to '{self.music_folder}'.")
+                except shutil.Error as e:
+                    print(f"Error moving '{filename}': {e}")
 
     def remove_duplicates(self):
         count_duplicates = 0
@@ -98,6 +119,7 @@ class MusicProcessor:
 
 def main():
     music_processor = MusicProcessor(r'D:\Music\test_folder')
+    music_processor.move_files_to_root()
     # music_processor.read_keyboard_input()
     # music_processor.remove_duplicates()
     music_processor.process_files()
